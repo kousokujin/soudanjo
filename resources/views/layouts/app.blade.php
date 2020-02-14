@@ -28,7 +28,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="固定相談所" />
     <meta property="og:description" content="察して" />
-    <meta property="og:image" content="https://ogp.png" />
+    <meta property="og:image" content="https://soudanjo.kousokujin.com/ogp.png" />
     <meta property="og:url" content="{{\Request::fullUrl()}}" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@sega_pso2" />

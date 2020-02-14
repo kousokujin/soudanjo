@@ -6,7 +6,7 @@
 <meta property="og:title" content="ログイン" />
 <meta property="og:type" content="article" />
 <meta property="og:description" content="ログイン" />
-<meta property="og:image" content="https:///opg.png" />
+<meta property="og:image" content="https://soudanjo.kousokujin.com/opg.png" />
 <meta property="og:url" content="{{\Request::fullUrl()}}" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@sega_pso2" />
@@ -83,9 +83,11 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
+                                    <!--
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
+                                    -->
                                 @endif
                             </div>
                         </div>

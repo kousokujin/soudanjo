@@ -101,7 +101,7 @@ class HomeController extends Controller
 
         $client = new Client();
         $webhookurl = config('discord_webhooks.discord_webhooks');
-        $url = 'http://soudanjo.kousokujin.com/quests/'.$res->id;
+        $url = 'https://soudanjo.kousokujin.com/quests/'.$res->id;
         $options = [
             'json'=> [
                 'content' => Auth::user()->name.'さんが新しいイベント「'.$request->quest_name.'」を作成したよ！！、みんなも参加しよう。'."\n".$url,
@@ -114,8 +114,11 @@ class HomeController extends Controller
                 'Content-Type' => 'application/json'
                 ]
             ];
-
-        $request = $client->Request('POST', $webhookurl, $options);
+        try{
+            $request = $client->Request('POST', $webhookurl, $options);
+        }catch(Exception $ex){
+            \Log::error($ex->getmessage());
+        }
 
         return redirect('/quests/'.$res->id)->with('alert','新しいイベントを作成しました。');
     }
