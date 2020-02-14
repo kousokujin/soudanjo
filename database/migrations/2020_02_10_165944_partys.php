@@ -22,7 +22,7 @@ class Partys extends Migration
             $table->integer('max');
             $table->integer('count');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('deadline');
+            $table->timestamp('deadline')->useCurrent();
         });
     }
 
