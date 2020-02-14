@@ -78,11 +78,11 @@ class nologin_view extends Controller
         $quest = DB::table("quests_table")
                 ->select('quests_table.id','quests_table.party_name','name','count','max','deadline','comment')
                 ->join('users','quests_table.userid','=','users.userid')
-                ->where('quests_table.deadline','>',Carbon::now())
+                ->where('quests_table.deadline','>',Carbon::now()->setTimezone('Asia/Tokyo'))
                 ->get();
 
         if(Auth::check()){
-            return view('index',['auths'=>Auth::user(),'quests'=>$quest]);
+            return view('index',['auths'=>Auth::user(),'quests'=>$quest,'now'=>Carbon::now()]);
         }else{
             return view('index',['quests'=>$quest]);
         }

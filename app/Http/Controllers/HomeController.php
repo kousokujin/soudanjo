@@ -32,13 +32,13 @@ class HomeController extends Controller
     {
         $auths = Auth::user();
         $mastar_events = DB::table('quests_table')
-                        ->where([['userid',Auth::user()->userid],['deadline','>',Carbon::now()->addminutes(30)]])
+                        ->where([['userid',Auth::user()->userid],['deadline','>',Carbon::now()->setTimezone('Asia/Tokyo')->addminutes(30)]])
                         ->get();
         $joined_events = DB::table('members')
                         ->select('quest_id','main_class','sub_class','party_name','deadline','users.name','max','count')
                         ->join('quests_table','quests_table.id','=','members.quest_id')
                         ->join('users','quests_table.userid','=','users.userid')
-                        ->where([['members.userid',Auth::user()->userid],['deadline','>',Carbon::now()->addminutes(30)]])->get();
+                        ->where([['members.userid',Auth::user()->userid],['deadline','>',Carbon::now()->setTimezone('Asia/Tokyo')->addminutes(30)]])->get();
 
         return view('home',['auths'=>Auth::user(),'joined_events'=>$joined_events,'mastar_event'=>$mastar_events]);
     }
