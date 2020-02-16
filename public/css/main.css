@@ -14,3 +14,15 @@ h3 {
 .icon-image{
     height:20px;
 }
+
+.scroll-table{
+    display: block;
+    overflow-x: scroll;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scroll-table tbody {
+    width: 100%;
+    display:table;
+  }

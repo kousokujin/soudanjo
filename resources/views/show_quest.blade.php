@@ -83,7 +83,7 @@
                 だれもいません。<br />
                 かなしい。。。
             @else
-                <table class="table table-striped">
+                <table class="table table-striped scroll-table">
                     <tr>
                         <th id="name_table">名前</th>
                         <th id="class_table">クラス</th>
