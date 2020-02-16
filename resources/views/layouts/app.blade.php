@@ -66,12 +66,17 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{asset('storage/profile_images/'.Auth::user()->icon)}}" class='icon-image'>
+                                <img src="{{asset('storage/profile_images/'.Auth::user()->icon)}}" class='icon-image rounded-sm'>
                                     {{ Auth::user()->name }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="/home">ダッシュボード</a>
                                     <a class="dropdown-item" href="/edit_profile/{{ $auths->userid }}">プロフィール編集</a>
+                                    @if(Auth::user()->priority > 4)
+                                        <a class="dropdown-item" href="/admin_user">ユーザー管理</a>
+                                        <a class="dropdown-item" href="/admin_event">イベント管理</a>
+                                        <a class="dropdown-item" href="/admin_member">参加メンバー管理</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                                 document.getElementById('logout-form').submit();">

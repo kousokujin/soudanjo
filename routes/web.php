@@ -32,3 +32,9 @@ Route::get('/icon','HomeController@icon');
 
 Route::get('/ogp.png', 'nologin_view@ogp');
 Route::get('/discord_icon.png','nologin_view@discord_icon');
+
+Route::get('/admin_user','AdminController@show_users');
+Route::get('/admin_event','AdminController@show_events');
+Route::get('/admin_member','AdminController@show_members');
+Route::get('/admin_password_edit/{userid}','AdminController@show_password');
+Route::post('/admin_modify_password','AdminController@modify_password');

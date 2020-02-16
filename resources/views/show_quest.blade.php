@@ -52,7 +52,7 @@
                 <tr>
                     <th>主催者</th>
                     <td>
-                        <img src="{{asset('storage/profile_images/'.$quest->icon)}}" class='icon-image'>
+                        <img src="{{asset('storage/profile_images/'.$quest->icon)}}" class='icon-image rounded-sm'>
                         {{ $quest->name}}
                     </td>
                 </tr>
@@ -92,7 +92,7 @@
                     @foreach($member as $m)
                     <tr>
                         <td>
-                            <img src="{{asset('storage/profile_images/'.$m->icon)}}" class='icon-image'>
+                            <img src="{{asset('storage/profile_images/'.$m->icon)}}" class='icon-image rounded-sm'>
                             {{$m->name}}
                         </td>
                         <td>
