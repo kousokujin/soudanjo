@@ -10,26 +10,6 @@
         }
     }
 </script>
-<script type="text/javascript">
-    function go_cal(){
-        var text = '{{$quest->name}}';
-        var datefrom = '{{$start_time}}';
-        var dateto = '{{$end_time}}';
-        var detail = '{{$quest->comment}}';
-
-        var zero = function(n) { return ('0' + n).slice(-2); };
-        var formatdate = function(datestr) {
-            var date = new Date(datestr + '+09:00');
-            return date.getUTCFullYear() + zero(date.getUTCMonth()+1) + zero(date.getUTCDate()) + 'T' +
-                zero(date.getUTCHours()) + zero(date.getUTCMinutes()) + zero(date.getUTCSeconds()) + 'Z';
-        };
-        var url = 'http://www.google.com/calendar/event?action=TEMPLATE' +
-            '&text=' + encodeURIComponent(text) +
-            '&dates=' + formatdate(datefrom) + '/' + formatdate(dateto) + 
-            '&details=' + encodeURIComponent(detail);
-        window.location.href= url;
-    }
-</script>
 @endsection
 
 @section('ogp')
@@ -68,11 +48,11 @@
                     <td>{!! nl2br(htmlspecialchars($quest->comment)) !!}</td>
                 </tr>
             </table>
-
-            @if(Auth::check() && $quest->userid == Auth::user()->userid)
-                <a href="/edit/{{$quest->id}}" class="btn btn-primary">編集</a>
-            @endif
-            <!--<a id='cal' class="btn btn-primary" href="#" onclick="go_cal();">カレンダーに追加</a>-->
+            
+                    @if(Auth::check() && $quest->userid == Auth::user()->userid)
+                    <a href="/edit/{{$quest->id}}" class="btn btn-primary">編集</a>
+                    @endif
+                    <a href="{{$google_url}}"><img src="https://www.google.com/calendar/images/ext/gc_button1_ja.gif" border="0"></a>
         </div>
     </div>
 

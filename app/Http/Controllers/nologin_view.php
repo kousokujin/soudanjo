@@ -18,14 +18,20 @@ class nologin_view extends Controller
                 ->where('quests_table.id',$id)->first();
         
         $start = new Carbon($quest->deadline);
-        $start_day = $start->format('Y-m-d');
-        $start_time = $start->format('H-i-s');
+        $start_day = $start->format('Ymd');
+        $start_time = $start->format('His');
         $end = $start->addMinutes(30);
-        $end_day=$end->format('Y-m-d');
-        $end_time=$end->format('H-i-s');
+        $end_day=$end->format('Ymd');
+        $end_time=$end->format('His');
 
         $start_enc = $start_day.'T'.$start_time;
         $end_enc = $end_day.'T'.$end_time;
+
+        $title_enc = rawurlencode($quest->party_name);
+        $detail_enc = rawurldecode($quest->comment);
+
+        $google_url = 'https://www.google.com/calendar/event?action=TEMPLATE&text='.$title_enc.'&details='.$detail_enc.'&dates='.$start_enc.'/'.$end_enc;
+        
 
         if($quest != null){
             $member_list = DB::table("members")
@@ -61,13 +67,11 @@ class nologin_view extends Controller
                                         'sub_class'=>$sub_class,
                                         'comment'=>$comment,
                                         'isdeadline'=>$isdeadline,
-                                        'start_time'=>$start_enc,
-                                        'end_time' => $end_enc]);
+                                        'google_url'=>$google_url]);
             }else{
                 return view('show_quest',['member'=> $member_list,
                                         'quest'=>$quest,
-                                        'start_time'=>$start_enc,
-                                        'end_time' => $end_enc]);
+                                        'google_url'=>$google_url]);
             }
         }else{
             abort('404');

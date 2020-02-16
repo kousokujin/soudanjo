@@ -104,7 +104,7 @@ class HomeController extends Controller
         $url = 'https://soudanjo.kousokujin.com/quests/'.$res->id;
         $options = [
             'json'=> [
-                'content' => Auth::user()->name.'さんが新しいイベント「'.$request->quest_name.'」を作成したよ！！、みんなも参加しよう。'."\n".$url,
+                'content' => Auth::user()->name.'さんが新しいイベント「'.$request->quest_name.'」を作成したよ！！みんなも参加しよう。'."\n".$url,
                 "username" => "固定相談所",
                 "avatar_url" => "https://soudanjo.kousokujin.com/discord_icon.png",
             ],

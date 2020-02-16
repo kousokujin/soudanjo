@@ -23,7 +23,12 @@ h3 {
     -webkit-overflow-scrolling: touch;
   }
 
-  .scroll-table tbody {
+.scroll-table tbody {
     width: 100%;
     display:table;
-  }
+}
+
+.vertical-center{
+    /*display: table-cell;
+    vertical-align: middle;*/
+}
