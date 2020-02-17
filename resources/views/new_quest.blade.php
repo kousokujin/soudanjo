@@ -48,7 +48,35 @@
                 </div>
 
                 <div class = "form-group row">
-                    <label for="comment" class="col-md-4 col-form-label text-md-right">コメント</label>
+                    <label for="start_date" class="col-md-4 col-form-label text-md-right">開始予定時刻(オプション)</label>
+                    <div class="col-md-6">
+                        <input id="start_date" type="date" class="form-control @error('date') is-invalid @enderror" name="start_date" value="{{ old('start_date') }}" required autofocus>
+                        <input id="start_time" type="time" class="form-control @error('time') is-invalid @enderror" name="start_time" value="{{ old('start_time') }}" required autofocus>
+
+                        @error('start_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class = "form-group row">
+                    <label for="end_date" class="col-md-4 col-form-label text-md-right">終了予定時刻(オプション)</label>
+                    <div class="col-md-6">
+                        <input id="end_date" type="date" class="form-control @error('date') is-invalid @enderror" name="end_date" value="{{ old('end_date') }}" required autofocus>
+                        <input id="end_time" type="time" class="form-control @error('end_time') is-invalid @enderror" name="end_time" value="{{ old('end_time') }}" required autofocus>
+
+                        @error('end_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class = "form-group row">
+                    <label for="comment" class="col-md-4 col-form-label text-md-right">コメント(オプション)</label>
                     <div class="col-md-6">
                         <textarea id="comment" type="text" class="form-control @error('comment') is-invalid @enderror" name="comment" value="{{ old('comment') }}" autofocus></textarea>
 

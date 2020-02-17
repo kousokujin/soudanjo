@@ -49,6 +49,29 @@ class HomeController extends Controller
         return view('new_quest',['auths'=>Auth::user()]);
     }
 
+    private function fix_time($date,$time){
+        if($time == null && $date == null){
+            return null;
+        }else{
+            return $date.' '.$time;
+        }
+    }
+
+    private function vaild_time($start_date,$start_time,$end_date,$end_time){
+        $start = $this->fix_time($start_date,$end_time);
+        $end = $this->fix_time($end_date,$end_time);
+        
+        $start = new Carbon($start_time);
+        $end = new Carbon($end_time);
+
+        if($start->lt($end) == false){
+            $start = $this->fix_time($end_date,$end_time);
+            $end = $this->fix_time($start_date,$start_time);
+        }
+
+        return ['start'=>$start,'end'=>$end];
+    }
+
     public function newquest_register(Request $request){
 
         $request->validate([
@@ -68,6 +91,10 @@ class HomeController extends Controller
             $cnt = 1;
         }
 
+        $quest_time = $this->vaild_time($request->start_date,$request->start_time,$request->end_date,$request->end_time);
+        $start_time = $quest_time['start'];
+        $end_time = $quest_time['end'];
+
         //\Request::setTrustedProxies(['192.168.0.0/16']);
 
         $db_write = DB::table('quests_table')->insert(
@@ -77,7 +104,9 @@ class HomeController extends Controller
             'ip'=>\Request::ip(),
             'deadline'=>$deadline,
             'count'=> $cnt,
-            'comment'=> $fix_comment]
+            'comment'=> $fix_comment,
+            'start_time' => $start_time,
+            'end_time'=> $end_time]
         );
 
         $res = DB::table('quests_table')->select('id')->where([['userid',Auth::user()->userid],['party_name',$request->quest_name]])
@@ -180,8 +209,26 @@ class HomeController extends Controller
         $date = $deadline->format('Y-m-d');
         $time = $deadline->format('H:i:s');
 
+        $start_time =null;
+        $start_date = null;
+
+        if($quest->start_time != null){
+            $start = new Carbon($quest->start_time);
+            $start_date = $start->format('Y-m-d');
+            $start_time = $start->format('H:i:s');
+        }
+
+        $end_time =null;
+        $end_date = null;
+
+        if($quest->end_time != null){
+            $end = new Carbon($quest->end_time);
+            $end_date = $end->format('Y-m-d');
+            $end_time = $end->format('H:i:s');
+        }
+
         if($quest != null){
-            return view('edit_event',['auths'=>Auth::user(),'quest'=>$quest,'time'=>$time,'date'=>$date]);
+            return view('edit_event',['auths'=>Auth::user(),'quest'=>$quest,'time'=>$time,'date'=>$date,'start_date'=>$start_date,'start_time'=>$start_time,'end_date'=>$end_date,'end_time'=>$end_time]);
         }else{
             abort('404');
         }
@@ -200,6 +247,10 @@ class HomeController extends Controller
 
         $deadline = $request->date .' '.$request->time;
 
+        $quest_time = $this->vaild_time($request->start_date,$request->start_time,$request->end_date,$request->end_time);
+        $start_time = $quest_time['start'];
+        $end_time = $quest_time['end'];
+
         //\Request::setTrustedProxies(['192.168.0.0/16']);
 
         $db_write = DB::table('quests_table')->where('id',$request->id)->update(
@@ -207,7 +258,9 @@ class HomeController extends Controller
             'max'=>$request->max_member,
             'ip'=>\Request::ip(),
             'deadline'=>$deadline,
-            'comment'=> $fix_comment]
+            'comment'=> $fix_comment,
+            'start_time'=>$start_time,
+            'end_time'=>$end_time]
         );
 
         return redirect('/quests/'.$request->id)->with('alert','変更しました。');

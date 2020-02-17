@@ -13,14 +13,23 @@ class nologin_view extends Controller
     public function show_quest($id){
         //$quest = DB::table("quests_table")->where('id',$id)->first();
         $quest = DB::table("quests_table")
-                ->select('quests_table.id','quests_table.party_name','name','quests_table.userid','count','max','deadline','comment','icon')
+                ->select('quests_table.id','quests_table.party_name','name','quests_table.userid','count','max','deadline','comment','icon','start_time','end_time')
                 ->join('users','quests_table.userid','=','users.userid')
                 ->where('quests_table.id',$id)->first();
+
         
-        $start = new Carbon($quest->deadline);
+        if($quest->start_time != null and $quest->end_time != null){
+            $start = new Carbon($quest->start_time);
+            $end = new Carbon($quest->end_time);
+        }else{        
+            $start = new Carbon($quest->deadline);
+            $end_obj = new Carbon($quest->deadline);
+            $end = $end_obj->addMinutes(30);
+        }
+
         $start_day = $start->format('Ymd');
         $start_time = $start->format('His');
-        $end = $start->addMinutes(30);
+        
         $end_day=$end->format('Ymd');
         $end_time=$end->format('His');
 

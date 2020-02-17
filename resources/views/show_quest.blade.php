@@ -43,6 +43,21 @@
                 <tr>
                     <th>参加締め切り</th>
                     <td>{{$quest->deadline}}</td>
+                </tr>
+                @if($quest->start_time != null)
+                    <tr>
+                        <th>開始予定時刻</th>
+                        <td>{{$quest->start_time}}</td>
+                    </tr>
+                @endif
+
+                @if($quest->end_time != null)
+                    <tr>
+                        <th>終了予定時刻</th>
+                        <td>{{$quest->end_time}}</td>
+                    </tr>
+                @endif
+
                 <tr>
                     <th>コメント</td>
                     <td>{!! nl2br(htmlspecialchars($quest->comment)) !!}</td>
