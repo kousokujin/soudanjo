@@ -51,18 +51,18 @@ class HomeController extends Controller
 
     private function fix_time($date,$time){
         if($time == null && $date == null){
-            return null;
+            return '1970-01-01 09:00:00';
         }else{
             return $date.' '.$time;
         }
     }
 
     private function vaild_time($start_date,$start_time,$end_date,$end_time){
-        $start = $this->fix_time($start_date,$end_time);
-        $end = $this->fix_time($end_date,$end_time);
+        $start_gen = $this->fix_time($start_date,$end_time);
+        $end_gen = $this->fix_time($end_date,$end_time);
         
-        $start = new Carbon($start_time);
-        $end = new Carbon($end_time);
+        $start = new Carbon($start_gen);
+        $end = new Carbon($end_gen);
 
         if($start->lt($end) == false){
             $start = $this->fix_time($end_date,$end_time);
@@ -96,18 +96,17 @@ class HomeController extends Controller
         $end_time = $quest_time['end'];
 
         //\Request::setTrustedProxies(['192.168.0.0/16']);
-
-        $db_write = DB::table('quests_table')->insert(
-            ['party_name'=> $request->quest_name,
-            'userid'=> Auth::user()->userid,
-            'max'=>$request->max_member,
-            'ip'=>\Request::ip(),
-            'deadline'=>$deadline,
-            'count'=> $cnt,
-            'comment'=> $fix_comment,
-            'start_time' => $start_time,
-            'end_time'=> $end_time]
-        );
+            $db_write = DB::table('quests_table')->insert(
+                ['party_name'=> $request->quest_name,
+                'userid'=> Auth::user()->userid,
+                'max'=>$request->max_member,
+                'ip'=>\Request::ip(),
+                'deadline'=>$deadline,
+                'count'=> $cnt,
+                'comment'=> $fix_comment,
+                'start_time' => $start_time,
+                'end_time'=> $end_time]
+            );
 
         $res = DB::table('quests_table')->select('id')->where([['userid',Auth::user()->userid],['party_name',$request->quest_name]])
         ->latest()->first();

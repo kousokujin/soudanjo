@@ -18,7 +18,7 @@ class nologin_view extends Controller
                 ->where('quests_table.id',$id)->first();
 
         
-        if($quest->start_time != null and $quest->end_time != null){
+        if($quest->start_time != '1970-01-01 09:00:00' and $quest->end_time != '1970-01-01 09:00:00'){
             $start = new Carbon($quest->start_time);
             $end = new Carbon($quest->end_time);
         }else{        
