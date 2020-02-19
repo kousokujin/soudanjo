@@ -51,7 +51,8 @@ class nologin_view extends Controller
             //$master_user = DB::table('users')->where('userid',$quest->userid)->first();
 
             $carbon_obj = new Carbon($quest->deadline);
-            $now = Carbon::now();
+            $now = new Carbon();
+            $now = $now -> addHours(9);
             $isdeadline = $now->gt($carbon_obj);
 
             if(Auth::check()){
@@ -93,8 +94,17 @@ class nologin_view extends Controller
     }
 
     public function quest_join(Request $request){
+        $data = DB::table('quests_table')->where('id',$request->id)->first();
+        $deadline =new Carbon($data->deadline);
+
+        if($data->count >= $data->max || $deadline->lt(Carbon::now()->setTimezone('Asia/Tokyo'))){
+            return redirect('/quests/'.$request->id)->with('alert','定員に達したか締め切りを過ぎました。');
+        }
+
+
         $request->validate([
-            'comment' => 'max:30'
+            'comment' => ['max:30'],
+            'display_name' => ['required','string']
         ]);
 
         if($request->comment == null){

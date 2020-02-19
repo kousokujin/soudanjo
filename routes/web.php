@@ -31,6 +31,8 @@ Route::post('/modify_profile','HomeController@modify_profile');
 Route::get('password/{userid}','HomeController@edit_password');
 Route::post('/modify_password','HomeController@modify_password');
 Route::get('/icon','HomeController@icon');
+Route::get('/join_out_page/{id}','HomeController@join_out_page');
+Route::post('/quests/outuser_join','HomeController@outuser_join');
 
 Route::get('/ogp.png', 'nologin_view@ogp');
 Route::get('/discord_icon.png','nologin_view@discord_icon');

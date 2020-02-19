@@ -75,6 +75,9 @@
                     @if(Auth::check() && $quest->userid == Auth::user()->userid)
                     <a href="/edit/{{$quest->id}}" class="btn btn-primary">編集</a>
                     @endif
+                    @if(Auth::check() && ($quest->count < $quest->max)||($isjoin == true))
+                    <a href="/join_out_page/{{$quest->id}}" class="btn btn-primary">外部の人の追加</a>
+                    @endif
                     <a href="{{$google_url}}"><img src="https://www.google.com/calendar/images/ext/gc_button1_ja.gif" border="0"></a>
         </div>
     </div>

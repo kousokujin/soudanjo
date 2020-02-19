@@ -381,4 +381,45 @@ class HomeController extends Controller
 
         return response()->file($file, $headers);
     }
+
+    public function join_out_page($id){
+        $quest = DB::table("quests_table")->where('id',$id)->first();
+
+        return view('join_event_page',['quest'=>$quest,'auths'=>Auth::user()]);
+    }
+
+    public function outuser_join(Request $request){
+        $data = DB::table('quests_table')->where('id',$request->id)->first();
+
+        if($data->count >= $data->max){
+            return redirect('/quests/'.$request->id)->with('alert','定員に達しました。');
+        }
+
+
+        $request->validate([
+            'display_name' => ['required','string'],
+            'comment' => ['max:30']
+        ]);
+
+        if($request->comment == null){
+            $fix_comment = "";
+        }else{
+            $fix_comment = $request->comment;
+        }
+
+        //\Request::setTrustedProxies(['192.168.0.0/16']);
+            
+        DB::table('members')->insert(
+            [
+                'quest_id' => $request->id,
+                'name' => $request->display_name,
+                'main_class' => $request->main_class,
+                'sub_class' => $request->sub_class,
+                'comment' => $fix_comment,
+                'ip' => \Request::ip()
+            ]);
+        DB::table('quests_table')->where('id',$request->id)->increment('count');
+
+        return redirect('/quests/'.$request->id)->with('alert','追加しました。');
+    }
 }
