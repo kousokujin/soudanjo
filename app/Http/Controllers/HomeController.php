@@ -51,7 +51,7 @@ class HomeController extends Controller
 
     private function fix_time($date,$time){
         if($time == null && $date == null){
-            return '1970-01-01 09:00:00';
+            return null;
         }else{
             return $date.' '.$time;
         }
@@ -92,8 +92,15 @@ class HomeController extends Controller
         }
 
         $quest_time = $this->vaild_time($request->start_date,$request->start_time,$request->end_date,$request->end_time);
-        $start_time = $quest_time['start'];
-        $end_time = $quest_time['end'];
+        if($request->start_date != null && $request->start_time != null && $request->end_date != null && $request->end_time != null){
+            $start_time = $quest_time['start'];
+            $end_time = $quest_time['end'];
+            $isTimeSet = true;
+        }else{
+            $start_time = null;
+            $end_time = null;
+            $isTimeSet = false;
+        }
 
         //\Request::setTrustedProxies(['192.168.0.0/16']);
             $db_write = DB::table('quests_table')->insert(
@@ -105,7 +112,8 @@ class HomeController extends Controller
                 'count'=> $cnt,
                 'comment'=> $fix_comment,
                 'start_time' => $start_time,
-                'end_time'=> $end_time]
+                'end_time'=> $end_time,
+                'isTimeSet' => $isTimeSet]
             );
 
         $res = DB::table('quests_table')->select('id')->where([['userid',Auth::user()->userid],['party_name',$request->quest_name]])
@@ -247,8 +255,15 @@ class HomeController extends Controller
         $deadline = $request->date .' '.$request->time;
 
         $quest_time = $this->vaild_time($request->start_date,$request->start_time,$request->end_date,$request->end_time);
-        $start_time = $quest_time['start'];
-        $end_time = $quest_time['end'];
+        if($request->start_date != null && $request->start_time != null && $request->end_date != null && $request->end_time != null){
+            $start_time = $quest_time['start'];
+            $end_time = $quest_time['end'];
+            $isTimeSet = true;
+        }else{
+            $start_time = null;
+            $end_time = null;
+            $isTimeSet = false;
+        }
 
         //\Request::setTrustedProxies(['192.168.0.0/16']);
 
@@ -259,7 +274,8 @@ class HomeController extends Controller
             'deadline'=>$deadline,
             'comment'=> $fix_comment,
             'start_time'=>$start_time,
-            'end_time'=>$end_time]
+            'end_time'=>$end_time,
+            'isTimeSet'=>$isTimeSet]
         );
 
         return redirect('/quests/'.$request->id)->with('alert','変更しました。');

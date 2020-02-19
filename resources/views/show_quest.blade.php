@@ -52,14 +52,14 @@
                     <th>参加締め切り</th>
                     <td>{{$quest->deadline}}</td>
                 </tr>
-                @if($quest->start_time != '1970-01-01 09:00:00')
+                @if($quest->isTimeSet == true)
                     <tr>
                         <th>開始予定時刻</th>
                         <td>{{$quest->start_time}}</td>
                     </tr>
                 @endif
 
-                @if($quest->end_time != '1970-01-01 09:00:00')
+                @if($quest->isTimeSet == true)
                     <tr>
                         <th>終了予定時刻</th>
                         <td>{{$quest->end_time}}</td>
