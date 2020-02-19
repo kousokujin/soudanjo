@@ -9,6 +9,14 @@
             window.location.href = "/cancel/{{$quest->id}}";
         }
     }
+
+    function Admin_CancelCheck($id) {
+        var res = confirm("キャンセルしますか？");
+        if( res == true ) {
+            // OKなら移動
+            window.location.href = "/admin_cancel/{{$quest->id}}/"+$id;
+        }
+    }
 </script>
 @endsection
 
@@ -83,11 +91,16 @@
                         <th id="name_table">名前</th>
                         <th id="class_table">クラス</th>
                         <th class="auto_width">コメント</th>
+                        @if(Auth::check() && Auth::user()->userid == $quest->userid)
+                        <th></th>
+                        @endif
                     </tr>
                     @foreach($member as $m)
                     <tr>
                         <td>
+                            @if($m->icon != null)
                             <img src="{{asset('storage/profile_images/'.$m->icon)}}" class='icon-image rounded-sm'>
+                            @endif
                             {{$m->name}}
                         </td>
                         <td>
@@ -102,6 +115,9 @@
                         
                         </td>
                         <td class="auto_width">{{$m->comment}}</td>
+                        @if(Auth::check() && Auth::user()->userid == $quest->userid)
+                        <td><a class="btn btn-primary btn-danger" href="#" onclick="Admin_CancelCheck({{$m->id}});">取り消し</a></td>
+                        @endif
                     </tr>
                     @endforeach
                 </table>
@@ -109,13 +125,27 @@
         </div>
     </div>
     
-    @if(Auth::check())
     <div class="card margin-top">
         <div class='card-header'>参加/変更</div>
         <div class='card-body'>
             @if(($quest->count < $quest->max && $isdeadline == false)||($isjoin == true))
-            <form method="POST" action="/quests/join" onsubmit="return check(this)">
+            <form method="POST" @if(Auth::check()) action="/quests/join" @else action="/quests/nouser_join" @endif onsubmit="return check(this)">
                 {{ csrf_field() }}
+
+                @if(!Auth::check())
+                <div class = "form-group row">
+                    <label for="display_name" class="col-md-4 col-form-label text-md-right">名前</label>
+                    <div class="col-md-6">
+                        <input id="display_name" type="text" class="form-control @error('display_name') is-invalid @enderror" name="display_name" value="{{ old('display_name') }}" required autofocus>
+
+                        @error('display_name')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                @endif
                 <div class = "form-group row">
                     <label for="main_class" class="col-md-4 col-form-label text-md-right">メインクラス</label>
                     <div class="col-md-6">
@@ -197,5 +227,4 @@
             @endif
         </div>
     </div>
-    @endif
 @endsection

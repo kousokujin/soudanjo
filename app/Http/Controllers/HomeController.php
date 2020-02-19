@@ -322,6 +322,18 @@ class HomeController extends Controller
 
     }
 
+    public function admin_cancel($quest_id,$id){
+        $quest_owner = DB::table('quests_table')->where('id',$quest_id)->first();
+        if($quest_owner->userid != Auth::user()->userid){
+            return redirect('/quests/'.$quest_id);
+        }
+
+
+        DB::table('members')->where([['quest_id',$quest_id],['id',$id]])->delete();
+        DB::table('quests_table')->where('id',$quest_id)->decrement('count');
+        return redirect('/quests/'.$quest_id)->with('alert','キャンセルしました。');
+    }
+
     public function modify_password(Request $request){
         $request->validate([
             'old_pass' => [

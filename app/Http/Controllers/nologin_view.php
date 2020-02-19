@@ -44,8 +44,8 @@ class nologin_view extends Controller
 
         if($quest != null){
             $member_list = DB::table("members")
-            ->select('members.name','main_class','sub_class','comment','members.userid','icon')
-            ->join('users','members.userid','=','users.userid')
+            ->select('members.id','members.name','main_class','sub_class','comment','members.userid','icon')
+            ->leftjoin('users','members.userid','=','users.userid')
             ->where('quest_id',$id)
             ->get();
             //$master_user = DB::table('users')->where('userid',$quest->userid)->first();
@@ -80,11 +80,43 @@ class nologin_view extends Controller
             }else{
                 return view('show_quest',['member'=> $member_list,
                                         'quest'=>$quest,
+                                        'isdeadline'=>$isdeadline,
+                                        'main_class' => 'none',
+                                        'sub_class' => 'none',
+                                        'comment' => '',
+                                        'isjoin' => false,
                                         'google_url'=>$google_url]);
             }
         }else{
             abort('404');
         }
+    }
+
+    public function quest_join(Request $request){
+        $request->validate([
+            'comment' => 'max:30'
+        ]);
+
+        if($request->comment == null){
+            $fix_comment = "";
+        }else{
+            $fix_comment = $request->comment;
+        }
+
+        //\Request::setTrustedProxies(['192.168.0.0/16']);
+            
+        DB::table('members')->insert(
+            [
+                'quest_id' => $request->id,
+                'name' => $request->display_name,
+                'main_class' => $request->main_class,
+                'sub_class' => $request->sub_class,
+                'comment' => $fix_comment,
+                'ip' => \Request::ip()
+            ]);
+        DB::table('quests_table')->where('id',$request->id)->increment('count');
+
+        return redirect('/quests/'.$request->id)->with('alert','イベントに参加しました。');
     }
 
     public function index(){

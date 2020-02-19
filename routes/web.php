@@ -19,6 +19,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/new_quest_wanted','HomeController@new_quest')->name('new_quest');
 Route::post('/newquest_register','HomeController@newquest_register')->name('newquest_register');
 Route::get('/quests/{id}','nologin_view@show_quest');
+Route::post('/quests/nouser_join','nologin_view@quest_join');
+Route::get('/admin_cancel/{quest_id}/{id}','HomeController@admin_cancel');
 Route::post('/quests/join','HomeController@event_join');
 Route::get('/cancel/{id}','HomeController@event_cancel');
 Route::get('/edit/{id}','HomeController@edit_event');
@@ -38,3 +40,5 @@ Route::get('/admin_event','AdminController@show_events');
 Route::get('/admin_member','AdminController@show_members');
 Route::get('/admin_password_edit/{userid}','AdminController@show_password');
 Route::post('/admin_modify_password','AdminController@modify_password');
+
+//Route::get('/get_event','GetEmgController@get_emg');
