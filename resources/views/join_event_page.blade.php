@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card margin-top">
-        <div class='card-header'>外部の人の参加</div>
+        <div class='card-header'>他の人を追加</div>
         <div class='card-body'>
             @if(($quest->count < $quest->max)||($isjoin == true))
             <form method="POST" action="/quests/outuser_join" onsubmit="return check(this)">
@@ -11,8 +11,14 @@
                 <div class = "form-group row">
                     <label for="display_name" class="col-md-4 col-form-label text-md-right">名前</label>
                     <div class="col-md-6">
-                        <input id="display_name" type="text" class="form-control @error('display_name') is-invalid @enderror" name="display_name" value="{{ old('display_name') }}" required autofocus>
-
+                        <input id="display_name" type="text" list="userlist" class="form-control @error('display_name') is-invalid @enderror" name="display_name" value="{{ old('display_name') }}" required autofocus>
+                        <datalist id="userlist">
+                            @foreach($users as $u)
+                            <option value="{{'@'.$u->userid}}">
+                                {{$u->name}}
+                            </option>
+                            @endforeach
+                        </datalist>
                         @error('display_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

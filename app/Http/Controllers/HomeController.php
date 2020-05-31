@@ -384,8 +384,10 @@ class HomeController extends Controller
 
     public function join_out_page($id){
         $quest = DB::table("quests_table")->where('id',$id)->first();
+        $users = DB::table('users')->select('userid','name')->get();
 
-        return view('join_event_page',['quest'=>$quest,'auths'=>Auth::user()]);
+
+        return view('join_event_page',['quest'=>$quest,'users'=>$users,'auths'=>Auth::user()]);
     }
 
     public function outuser_join(Request $request){
@@ -407,17 +409,64 @@ class HomeController extends Controller
             $fix_comment = $request->comment;
         }
 
+        if(0 === strpos($request->display_name,'@')){
+            $display_str = ltrim($request->display_name,'@');
+            $exist_user = DB::table('users')->select('userid','name')->where('userid',$display_str)->first();
+            
+            $request->validate(
+                ['display_name' =>[
+                    function($attribute,$value,$fail){
+                        #2回DBに問い合わせしてるのなんとかしたい
+                        $display_str = ltrim($value,'@');
+                        $exist_user = DB::table('users')->select('userid','name')->where('userid',$display_str)->first();
+                        if($exist_user == null){
+                            return $fail('ユーザーが存在しません。');
+                        }
+                    }
+                ]
+            ]);
+
+            $isjoined = DB::table('members')->select('userid','quest_id')->where([['userid',$display_str],['quest_id',$request->id]])->first();
+
+            if($isjoined != null){
+
+                DB::table('members')->where([['userid',$display_str],['quest_id',$request->id]])->update(
+                    [
+                        'main_class' => $request->main_class,
+                        'sub_class' => $request->sub_class,
+                        'comment' => $fix_comment,
+                    ]
+                );
+                return redirect('/quests/'.$request->id)->with('alert','変更しました。');
+            }else{
+
+                DB::table('members')->insert(
+                    [
+                        'quest_id' => $request->id,
+                        'name' => $exist_user->name,
+                        'main_class' => $request->main_class,
+                        'sub_class' => $request->sub_class,
+                        'comment' => $fix_comment,
+                        'userid' => $exist_user->userid,
+                        'ip' => \Request::ip()
+                    ]);
+            }
+
+        }else{
         //\Request::setTrustedProxies(['192.168.0.0/16']);
             
-        DB::table('members')->insert(
-            [
-                'quest_id' => $request->id,
-                'name' => $request->display_name,
-                'main_class' => $request->main_class,
-                'sub_class' => $request->sub_class,
-                'comment' => $fix_comment,
-                'ip' => \Request::ip()
-            ]);
+            DB::table('members')->insert(
+                [
+                    'quest_id' => $request->id,
+                    'name' => $request->display_name,
+                    'main_class' => $request->main_class,
+                    'sub_class' => $request->sub_class,
+                    'comment' => $fix_comment,
+                    'ip' => \Request::ip()
+                ]);
+        }
+
+        $count = $data->count + 1;
         DB::table('quests_table')->where('id',$request->id)->increment('count');
 
         return redirect('/quests/'.$request->id)->with('alert','追加しました。');
