@@ -112,8 +112,11 @@
                             @else
                             {{$m->main_class}}
                             @endif
-                            @if($m->sub_class !== "none" and $m->main_class !=="Hr" and $m->main_class !=="Ph" and $m->main_class !=="Et" and $m->main_class !=="none")
-                            {{$m->sub_class}}
+
+                            @if($m->main_class != $m->sub_class)
+                                @if($m->sub_class !== "none" and $m->main_class !=="Hr" and $m->main_class !=="Ph" and $m->main_class !=="Et" and $m->main_class != "Lu" and $m->main_class !=="none")
+                                {{$m->sub_class}}
+                                @endif
                             @endif
                         
                         </td>
@@ -161,11 +164,12 @@
                             <option value="Fo" @if($main_class == 'Fo') selected @endif>フォース</option>
                             <option value="Te" @if($main_class == 'Te') selected @endif>テクター</option>
                             <option value="Br" @if($main_class == 'Br') selected @endif>ブレイバー</option>
-                            <option value="Bo" @if($main_class == 'Br') selected @endif> バウンサー</option>
+                            <option value="Bo" @if($main_class == 'Bo') selected @endif> バウンサー</option>
                             <option value="Su" @if($main_class == 'Su') selected @endif>サモナー</option>
                             <option value="Hr" @if($main_class == 'Hr') selected @endif>ヒーロー</option>
                             <option value="Ph" @if($main_class == 'Ph') selected @endif>ファントム</option>
                             <option value="Et" @if($main_class == 'Et') selected @endif>エトワール</option>
+                            <option value="Lu" @if($main_class == 'Lu') selected @endif>ラスター</option>
                         </select>
 
                     </div>
@@ -183,10 +187,11 @@
                             <option value="Fo" @if($sub_class == 'Fo') selected @endif>フォース</option>
                             <option value="Te" @if($sub_class == 'Te') selected @endif>テクター</option>
                             <option value="Br" @if($sub_class == 'Br') selected @endif>ブレイバー</option>
-                            <option value="Bo" @if($sub_class == 'Br') selected @endif> バウンサー</option>
+                            <option value="Bo" @if($sub_class == 'Bo') selected @endif> バウンサー</option>
                             <option value="Su" @if($sub_class == 'Su') selected @endif>サモナー</option>
                             <option value="Ph" @if($sub_class == 'Ph') selected @endif>ファントム</option>
                             <option value="Et" @if($sub_class == 'Et') selected @endif>エトワール</option>
+                            <option value="Lu" @if($sub_class == 'Lu') selected @endif>ラスター</option>
                         </select>
                     </div>
                 </div>

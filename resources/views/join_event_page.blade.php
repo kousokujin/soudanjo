@@ -43,6 +43,7 @@
                             <option value="Hr">ヒーロー</option>
                             <option value="Ph">ファントム</option>
                             <option value="Et">エトワール</option>
+                            <option value="Lu">ラスター</option>
                         </select>
 
                     </div>
@@ -64,6 +65,7 @@
                             <option value="Su">サモナー</option>
                             <option value="Ph">ファントム</option>
                             <option value="Et">エトワール</option>
+                            <option value="Lu">ラスター</option>
                         </select>
                     </div>
                 </div>
